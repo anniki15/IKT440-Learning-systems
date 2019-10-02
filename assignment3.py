@@ -2,6 +2,8 @@ import os
 import re
 from pathlib import Path
 
+#hahahahahahaha
+
 ### GLOBALS
 newsgroup_folder = '20_newsgroups/'
 category_folderS = os.listdir(newsgroup_folder)
