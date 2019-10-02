@@ -35,8 +35,8 @@ class Category:
     def set_category_probability(self, total_document_count):
         self.category_prob = self.documents_count / total_document_count
 
-    def set_word_probabilities(self):
-          self.word_probabilities
+    # def set_word_probabilities(self):
+    #     self.word_probabilities = dicself.
 
     # def set_prob(self, ):
 
