@@ -10,6 +10,7 @@ category_folderS = os.listdir(newsgroup_folder)
 vocabulary = set()
 total_document_count = 0
 prediction_testing_documents = dict()
+categories = dict()
 ###
 
 class Category:
@@ -23,20 +24,15 @@ class Category:
 
     def increment_document_count(self):
         self.documents_count += 1
-
     def increment_word_count(self, word):
         self.unique_words_count[word] += 1
-
     def add_word(self, word):
         self.unique_words.add(word)
         self.unique_words_count[word] = 1
-
     def has_word(self, word):
         return word in self.unique_words
-
     def set_category_probability(self, total_document_count):
         self.category_prob = self.documents_count / total_document_count
-
     def set_word_probabilities(self):
         n = 0
         vocabulary_length = len(vocabulary)
@@ -52,11 +48,9 @@ class Category:
         for word in vocabulary:
             if word not in self.unique_words:
                 self.word_probabilities[word] = 1 / (n + vocabulary_length)
-
     def print_word_count(self):
         print(self.unique_words_count)
 
-categories = dict()
 
 #Cleaning the file. Removing everything above Lines:, and symbols and punctuation
 #Improvment ideas:
@@ -73,6 +67,32 @@ def clean_document(file):
         t += s + ' '
 
     return t
+def predict_document(path: Path) -> str:
+    document_words = set()
+    with open(path) as f:
+        f = clean_document(f.read())
+        for word in f.split():
+            document_words.add(word)
+
+    # Finds group with max P(O | H) * P(H)
+    max_group = ''
+    max_p = 1
+    for candidate_category in categories.values():
+        # Calculates P(O | H) * P(H) for candidate group
+        i = candidate_category.category_prob
+        #Log(P(category))
+        p = math.log(candidate_category.category_prob)
+        # OBS change to words from document
+        for word in document_words:
+            if word in vocabulary:
+                p += math.log(candidate_category.word_probabilities[word])
+
+        if p > max_p or max_p == 1:
+            max_p = p
+            max_group = candidate_category
+
+    return max_group.name
+
 
 
 for category_folder in category_folderS:
@@ -109,36 +129,7 @@ for category_folder in category_folderS:
 for c in categories.values():
     c.set_category_probability(total_document_count)
     c.set_word_probabilities()
-# print(vocabulary)
-# print(categories)
-# for c in categories.values():
-#     c.print_word_count()
 
-def predict_document(path: Path) -> str:
-    document_words = set()
-    with open(path) as f:
-        f = clean_document(f.read())
-        for word in f.split():
-            document_words.add(word)
-
-    # Finds group with max P(O | H) * P(H)
-    max_group = ''
-    max_p = 1
-    for candidate_category in categories.values():
-        # Calculates P(O | H) * P(H) for candidate group
-        i = candidate_category.category_prob
-        #Log(P(category))
-        p = math.log(candidate_category.category_prob)
-        # OBS change to words from document
-        for word in document_words:
-            if word in vocabulary:
-                p += math.log(candidate_category.word_probabilities[word])
-
-        if p > max_p or max_p == 1:
-            max_p = p
-            max_group = candidate_category
-
-    return max_group.name
 
 for category in prediction_testing_documents.keys():
     correct_guesses = 0
