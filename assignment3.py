@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 ### GLOBALS
-newsgroup_folder = '00_newsgroups/'
+newsgroup_folder = '20_newsgroups/'
 category_folderS = os.listdir(newsgroup_folder)
 vocabulary = set()
 total_document_count = 0
@@ -49,6 +49,9 @@ class Category:
             p = (nk + 1) / (n + vocabulary_length)
             #Placing the probability in a new dictionary
             self.word_probabilities[k] = p
+        for word in vocabulary:
+            if word not in self.unique_words:
+                self.word_probabilities[word] = 1 / (n + vocabulary_length)
 
 
     def print_word_count(self):
@@ -136,11 +139,24 @@ def predict_document(path: Path) -> str:
             max_p = p
             max_group = candidate_category
 
-    return max_group
+    return max_group.name
 
-for category in prediction_testing_documents.values():
-    for document in category:
-        print(predict_document(document))
+for category in prediction_testing_documents.keys():
+    correct_guesses = 0
+    incorrect_guesses = 0
+    correct_category = category
+    print('---------', correct_category)
+    for document in prediction_testing_documents[category]:
+        # print(predict_document(document))
+        guessed_category = predict_document(document)
+        if guessed_category == correct_category:
+            correct_guesses += 1
+        else:
+            incorrect_guesses +=1
+
+    print('correct_guesses', correct_guesses)
+    print('incorrect_guesses', incorrect_guesses)
+
 
 
 
