@@ -78,11 +78,8 @@ def predict_document(path: Path) -> str:
     max_group = ''
     max_p = 1
     for candidate_category in categories.values():
-        # Calculates P(O | H) * P(H) for candidate group
-        i = candidate_category.category_prob
-        #Log(P(category))
+        # Calculates P(O | H) * P(H) for candidate category
         p = math.log(candidate_category.category_prob)
-        # OBS change to words from document
         for word in document_words:
             if word in vocabulary:
                 p += math.log(candidate_category.word_probabilities[word])
@@ -135,7 +132,7 @@ for category in prediction_testing_documents.keys():
     correct_guesses = 0
     incorrect_guesses = 0
     correct_category = category
-    print('---------', correct_category)
+    print('Predicting category: ', correct_category)
     for document in prediction_testing_documents[category]:
         # print(predict_document(document))
         guessed_category = predict_document(document)
