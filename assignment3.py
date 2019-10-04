@@ -36,10 +36,19 @@ class Category:
     def set_category_probability(self, total_document_count):
         self.category_prob = self.documents_count / total_document_count
 
-    # def set_word_probabilities(self):
-    #     self.word_probabilities = dicself.
+    def set_word_probabilities(self):
+        n = 0
+        vocabulary_length = len(vocabulary)
 
-    # def set_prob(self, ):
+        for v in self.unique_words_count.value():
+            n += v
+        for k in self.unique_words_count.keys():
+            nk = self.unique_words_count[k]
+            #Probability of word for the given category
+            p = (nk + 1) / (n + vocabulary_length)
+            #Placing the probability in a new dictionary
+            self.word_probabilities[k] = p
+
 
 categories = dict()
 
@@ -95,7 +104,6 @@ for category_folder in category_folderS:
 
 print(vocabulary)
 print(categories)
-
 
 for c in categories.values():
     c.set_category_probability(total_document_count)
