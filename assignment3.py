@@ -53,7 +53,6 @@ class Category:
             if word not in self.unique_words:
                 self.word_probabilities[word] = 1 / (n + vocabulary_length)
 
-
     def print_word_count(self):
         print(self.unique_words_count)
 
