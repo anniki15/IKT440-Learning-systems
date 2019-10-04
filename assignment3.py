@@ -1,5 +1,6 @@
 import os
 import re
+import math
 from pathlib import Path
 
 
@@ -48,7 +49,6 @@ class Category:
             p = (nk + 1) / (n + vocabulary_length)
             #Placing the probability in a new dictionary
             self.word_probabilities[k] = p
-
 
     def print_word_count(self):
         print(self.unique_words_count)
