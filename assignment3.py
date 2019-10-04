@@ -41,7 +41,7 @@ class Category:
         n = 0
         vocabulary_length = len(vocabulary)
 
-        for v in self.unique_words_count.value():
+        for v in self.unique_words_count.values():
             n += v
         for k in self.unique_words_count.keys():
             nk = self.unique_words_count[k]
@@ -101,12 +101,11 @@ for category_folder in category_folderS:
 
     for doc_name in category_documentS[two_thirds_of_documents:]:
         absolute_document_path = Path(newsgroup_folder) / category_folder / doc_name
-        with open(absolute_document_path) as f:
-            f = f.read()
-            f = clean_document(f)
-            prediction_testing_documents[category_folder].append(f)
+        prediction_testing_documents[category_folder].append(absolute_document_path)
 
-print(prediction_testing_documents)
+for c in categories.values():
+    c.set_category_probability(total_document_count)
+    c.set_word_probabilities()
 # print(vocabulary)
 # print(categories)
 # for c in categories.values():
@@ -124,12 +123,12 @@ def predict_document(path: Path) -> str:
     max_p = 1
     for candidate_category in categories.values():
         # Calculates P(O | H) * P(H) for candidate group
-
+        i = candidate_category.category_prob
         #Log(P(category))
         p = math.log(candidate_category.category_prob)
         # OBS change to words from document
         for word in document_words:
-            if vocabulary(word):
+            if word in vocabulary:
                 p += math.log(candidate_category.word_probabilities[word])
 
         if p > max_p or max_p == 1:
@@ -137,6 +136,10 @@ def predict_document(path: Path) -> str:
             max_group = candidate_category
 
     return max_group
+
+for category in prediction_testing_documents.values():
+    for document in category:
+        print(predict_document(document))
 
 
 
