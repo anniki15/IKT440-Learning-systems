@@ -1,5 +1,6 @@
 import os
 import re
+import math
 from pathlib import Path
 
 
@@ -40,7 +41,7 @@ class Category:
         n = 0
         vocabulary_length = len(vocabulary)
 
-        for v in self.unique_words_count.value():
+        for v in self.unique_words_count.values():
             n += v
         for k in self.unique_words_count.keys():
             nk = self.unique_words_count[k]
@@ -105,6 +106,7 @@ for category_folder in category_folderS:
 
 for c in categories.values():
     c.set_category_probability(total_document_count)
+    c.set_word_probabilities()
 # print(vocabulary)
 # print(categories)
 # for c in categories.values():
@@ -127,7 +129,7 @@ def predict_document(path: Path) -> str:
         p = math.log(candidate_category.category_prob)
         # OBS change to words from document
         for word in document_words:
-            if vocabulary(word):
+            if word in vocabulary:
                 p += math.log(candidate_category.word_probabilities[word])
 
         if p > max_p or max_p == 1:
