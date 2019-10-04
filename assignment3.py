@@ -1,14 +1,15 @@
 import os
 import re
+import math
 from pathlib import Path
 
 
 ### GLOBALS
-newsgroup_folder = '20_newsgroups/'
+newsgroup_folder = '00_newsgroups/'
 category_folderS = os.listdir(newsgroup_folder)
 vocabulary = set()
 total_document_count = 0
-prediction_testing_documents = list()
+prediction_testing_documents = dict()
 ###
 
 class Category:
@@ -41,6 +42,9 @@ class Category:
 
     # def set_prob(self, ):
 
+    def print_word_count(self):
+        print(self.unique_words_count)
+
 categories = dict()
 
 #Cleaning the file. Removing everything above Lines:, and symbols and punctuation
@@ -68,45 +72,65 @@ for category_folder in category_folderS:
 
     categories[category_folder] = Category(category_folder)
 
+    #a list list of all documents to be predicted, accosiated with its correct category
+    prediction_testing_documents[category_folder] = list()
+
     #iterate the first 2/3 of the documents per category
     for doc_name in category_documentS[:two_thirds_of_documents]:
         total_document_count += 1
-
         absolute_document_path = Path(newsgroup_folder) / category_folder / doc_name
-
         with open(absolute_document_path) as f:
             f = f.read()
-
             f = clean_document(f) # Remove headers, split on 'lines:'
-
             categories[category_folder].increment_document_count()
-
             for word in f.split():
-
                 vocabulary.add(word) #add word to vocabulary. set data type ensures distinct words
-
                 #add to category dict, or increment count
                 if categories[category_folder].has_word(word):
                     categories[category_folder].increment_word_count(word)
                 else:
                     categories[category_folder].add_word(word)
+
     for doc_name in category_documentS[two_thirds_of_documents:]:
-        pass
+        absolute_document_path = Path(newsgroup_folder) / category_folder / doc_name
+        with open(absolute_document_path) as f:
+            f = f.read()
+            f = clean_document(f)
+            prediction_testing_documents[category_folder].append(f)
 
-print(vocabulary)
-print(categories)
+print(prediction_testing_documents)
+# print(vocabulary)
+# print(categories)
+# for c in categories.values():
+#     c.print_word_count()
+
+def predict_document(path: Path) -> str:
+    document_words = set()
+    with open(path) as f:
+        f = clean_document(f.read())
+        for word in f.split():
+            document_words.add(word)
+
+    # Finds group with max P(O | H) * P(H)
+    max_group = ''
+    max_p = 1
+    for candidate_category in categories.values():
+        # Calculates P(O | H) * P(H) for candidate group
+
+        #Log(P(category))
+        p = math.log(candidate_category.category_prob)
+        # OBS change to words from document
+        for word in document_words:
+            if vocabulary(word):
+                p += math.log(candidate_category.word_probabilities[word])
+
+        if p > max_p or max_p == 1:
+            max_p = p
+            max_group = candidate_category
+
+    return max_group
 
 
-for c in categories.values():
-    c.set_category_probability(total_document_count)
-    # categories[category_path] = Category(category_path)
-    # print(vocabulary)
-    # print(categories)
 
-
-    # with open(e) as f:
-    #     data = f.read()
-    #     # data2 = data.split()
-    #     print(data)
 
 
