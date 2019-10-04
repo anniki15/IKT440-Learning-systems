@@ -1,6 +1,5 @@
 import os
 import re
-import math
 from pathlib import Path
 
 
@@ -37,10 +36,19 @@ class Category:
     def set_category_probability(self, total_document_count):
         self.category_prob = self.documents_count / total_document_count
 
-    # def set_word_probabilities(self):
-    #     self.word_probabilities = dicself.
+    def set_word_probabilities(self):
+        n = 0
+        vocabulary_length = len(vocabulary)
 
-    # def set_prob(self, ):
+        for v in self.unique_words_count.value():
+            n += v
+        for k in self.unique_words_count.keys():
+            nk = self.unique_words_count[k]
+            #Probability of word for the given category
+            p = (nk + 1) / (n + vocabulary_length)
+            #Placing the probability in a new dictionary
+            self.word_probabilities[k] = p
+
 
     def print_word_count(self):
         print(self.unique_words_count)
@@ -131,7 +139,6 @@ def predict_document(path: Path) -> str:
 for category in prediction_testing_documents.values():
     for document in category:
         print(predict_document(document))
-
 
 
 
