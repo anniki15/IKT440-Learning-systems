@@ -140,9 +140,11 @@ for category in prediction_testing_documents.keys():
             correct_guesses += 1
         else:
             incorrect_guesses +=1
+    accuracy = round(correct_guesses / (correct_guesses + incorrect_guesses) * 100)
 
     print('correct_guesses', correct_guesses)
     print('incorrect_guesses', incorrect_guesses)
+    print('Accuracy: ', accuracy, '%')
 
 
 
