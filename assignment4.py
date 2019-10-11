@@ -29,6 +29,27 @@ H_node = Node('H', H_wet_p_table)
 
 nodes = {'R':R_node, 'S':S_node, 'W':W_node, 'H':H_node}
 
+R_parents = {}
+S_parents = {}
+W_parents = {'R' : R_node}
+H_parents = {'R' : R_node, 'S' : S_node}
+
+R_node.parents = R_parents
+S_node.parents = S_parents
+W_node.parents = W_parents
+H_node.parents = H_parents
+
+R_children = {'W': W_node}
+S_children = {'H' : H_node, 'W' : W_node}
+W_children = {}
+H_children = {}
+
+R_node.children = R_children
+S_node.children = S_children
+W_node.children = W_children
+H_node.children = H_children
+
+
 given_states_example = {'H':1,'W':1}
 p_x_state_example = {'R':1}
 
