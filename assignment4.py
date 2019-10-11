@@ -3,25 +3,24 @@
 #  | \|
 #  W  H
 
-
+import random
 
 class Node:
-    def __init__(self, name, p_table ):
+    def __init__(self, name, p_table):
         self.name = name
         self.p_table = p_table
         self.state = 0
         # number of times state = 0, and state = 1:
-        self.distrobution = {0:0,1:0}
+        self.distribution = {0:0, 1:0}
         self.parents = {}
-        self.children ={}
-
+        self.children = {}
 
 #Keys: parents state, values: probability
 #-1 = orphan
-S_p_table = dict({'-1': .2})
-R_p_table = dict({'-1': .4})
-W_wet_p_table = dict({'0': .1}, {'1': .75})
-H_wet_p_table = dict({'00': .15}, {'01': .95}, {'10': .8}, {'11': .99})
+S_p_table = {'-1': .2}
+R_p_table = {'-1': .4}
+W_wet_p_table = {'0': .1, '1': .75}
+H_wet_p_table = {'00': .15,'01': .95, '10': .8, '11': .99}
 
 R_node = Node('R', R_p_table)
 S_node = Node('S', S_p_table)
@@ -34,11 +33,21 @@ given_states_example = {'H':1,'W':1}
 p_x_state_example = {'R':1}
 
 def infer_probability(p_x_state : dict, given_states: dict):
-    #set observered nodes
-    for n in given_states.keys():
 
+    #Set nodes to observed values or to random values if they are unobserved
+    observed_nodes = {}
+    unobserved_nodes = {}
+    for n in nodes.keys():
+        if n in given_states:
+            nodes[n].state = given_states[n]
+            observed_nodes[n] = nodes[n]
+        elif n not in p_x_state:
+            nodes[n].state = random.randrange(0,1)
+            unobserved_nodes[n] = nodes[n]
 
+    random_node = random.choice(list(unobserved_nodes.values()))
 
+    
 
 
 
