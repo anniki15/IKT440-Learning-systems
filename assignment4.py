@@ -106,7 +106,7 @@ def infer_probability(p_x_state : dict, given_states: dict):
             nodes[n].state = random.randrange(0,1)
             unobserved_nodes[n] = nodes[n]
 
-    for i in range(10):
+    for i in range(100):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
