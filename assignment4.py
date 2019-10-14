@@ -15,6 +15,41 @@ class Node:
         self.parents = {}
         self.children = {}
 
+    def get_state_as_str(self):
+        return str(self.state)
+
+    def get_parents_state(self):
+        #check for orphans
+        if not self.parents:
+            return '-1'
+
+        s = ''
+        for parent in self.parents.values():
+            s += parent.get_state_as_str()
+        return s
+
+    def p_given_parents(self):
+        return self.p_table[self.get_parents_state()]
+
+    def update(self):
+        p_x =  self.p_given_parents()
+        p_not_x = 1 - self.p_given_parents()
+        if self.children != {}:
+            for child in self.children.values():
+                temp = child.p_given_parents()
+                p_x *= temp
+                p_not_x *= (1 - temp)
+        alpha = 1 / (p_x + p_not_x)
+
+        p_x = p_x*alpha
+
+        if random.random() < p_x:
+            self.state = 1
+            self.distribution[1] += 1
+        else:
+            self.state = 0
+            self.distribution[0] += 1
+
 #Keys: parents state, values: probability
 #-1 = orphan
 S_p_table = {'-1': .2}
@@ -55,6 +90,8 @@ p_x_state_example = {'R':1}
 
 def infer_probability(p_x_state : dict, given_states: dict):
 
+    # Remember d-seperation
+
     #Set nodes to observed values or to random values if they are unobserved
     observed_nodes = {}
     unobserved_nodes = {}
@@ -62,14 +99,26 @@ def infer_probability(p_x_state : dict, given_states: dict):
         if n in given_states:
             nodes[n].state = given_states[n]
             observed_nodes[n] = nodes[n]
-        elif n not in p_x_state:
+        # elif n not in p_x_state:
+        #     nodes[n].state = random.randrange(0,1)
+        #     unobserved_nodes[n] = nodes[n]
+        else:
             nodes[n].state = random.randrange(0,1)
             unobserved_nodes[n] = nodes[n]
 
-    random_node = random.choice(list(unobserved_nodes.values()))
+    for i in range(10):
+        random_node = random.choice(list(unobserved_nodes.values()))
+        random_node.update()
 
-    
+infer_probability(p_x_state_example, given_states_example)
+
+for n in nodes.values():
+    print(n.distribution)
 
 
 
-infer_probability(given_states_example, p_x_state_example)
+
+
+
+
+
