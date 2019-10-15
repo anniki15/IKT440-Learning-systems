@@ -33,7 +33,7 @@ class Node:
 
     def update(self):
         p_x =  self.p_given_parents()
-        p_not_x = 1 - self.p_given_parents() #Kan vel ta 1-p_x bare? :)
+        p_not_x = 1 - p_x
         if self.children != {}:
             for child in self.children.values():
                 temp = child.p_given_parents()
@@ -106,7 +106,7 @@ def infer_probability(p_x_state : dict, given_states: dict):
             nodes[n].state = random.randrange(0,1)
             unobserved_nodes[n] = nodes[n]
 
-    for i in range(10):
+    for i in range(100):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
