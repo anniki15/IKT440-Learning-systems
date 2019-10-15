@@ -32,7 +32,7 @@ class Node:
         return self.p_table[self.get_parents_state()]
 
     def update(self):
-        p_x =  self.p_given_parents()
+        p_x = self.p_given_parents()
         p_not_x = 1 - p_x
         if self.children != {}:
             for child in self.children.values():
@@ -40,7 +40,6 @@ class Node:
                 p_x *= p_child
                 p_not_x *= (1 - p_child)
         alpha = 1 / (p_x + p_not_x)
-
         p_x = p_x*alpha
 
         if random.random() < p_x:
@@ -51,7 +50,7 @@ class Node:
             self.distribution[0] += 1
 
     def get_probability(self, state):
-
+        return 'Hubba-Bubba'
 
 #Keys: parents state, values: probability
 #-1 = orphan
@@ -69,8 +68,8 @@ nodes = {'R':R_node, 'S':S_node, 'W':W_node, 'H':H_node}
 
 R_parents = {}
 S_parents = {}
-W_parents = {'R' : R_node}
-H_parents = {'R' : R_node, 'S' : S_node}
+W_parents = {'R': R_node}
+H_parents = {'R': R_node, 'S': S_node}
 
 R_node.parents = R_parents
 S_node.parents = S_parents
@@ -78,7 +77,7 @@ W_node.parents = W_parents
 H_node.parents = H_parents
 
 R_children = {'W': W_node}
-S_children = {'H' : H_node, 'W' : W_node}
+S_children = {'H': H_node, 'W': W_node}
 W_children = {}
 H_children = {}
 
@@ -88,9 +87,10 @@ W_node.children = W_children
 H_node.children = H_children
 
 
-def infer_probability(x_key : str, x_state, given_states: dict):
-
-    # Remember d-seperation
+def infer_probability(x_key: str, x_state: int, given_states: dict):
+    for node in nodes.value():
+        for value in node.distribution.values():
+            value = 0
 
     #Set nodes to observed values or to random values if they are unobserved
     observed_nodes = {}
@@ -99,24 +99,21 @@ def infer_probability(x_key : str, x_state, given_states: dict):
         if n in given_states:
             nodes[n].state = given_states[n]
             observed_nodes[n] = nodes[n]
-        # elif n not in p_x_state:
-        #     nodes[n].state = random.randrange(0,1)
-        #     unobserved_nodes[n] = nodes[n]
         else:
             nodes[n].state = random.randrange(0,1)
             unobserved_nodes[n] = nodes[n]
-
+    #Stocastic simulation of probabilities
     for i in range(100):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
-    print('Probability of ', x_key, '=', x_state, ' given ', given_states)
+    print('Probability of ', x_key, '=', x_state, ' given ', given_states, ' is ', nodes[x_key].get_probability(x_state))
 
-infer_probability('R', 1 , {'H':1, 'W':1} )
+infer_probability('R', 1 , {'H':1, 'W':1})
+infer_probability('S', 1 , {'H':1, 'W':1})
+infer_probability('W', 1 , {'H':1})
+infer_probability('W', 1 , {'S':1})
 
-print('Distiburtion first query:')
-for n in nodes.values():
-    print(n.distribution)
 
 
 
