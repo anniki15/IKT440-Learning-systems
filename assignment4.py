@@ -49,8 +49,13 @@ class Node:
             self.state = 0
             self.distribution[0] += 1
 
-    def get_probability(self, state):
-        return 'Hubba-Bubba'
+    def get_probability(self, state: int):
+        state_0 = self.distribution[0]
+        state_1 = self.distribution[1]
+        if state == 0:
+            return state_0 / (state_0 + state_1) * 100
+        elif state == 1:
+            return state_1 / (state_0 + state_1) * 100
 
 #Keys: parents state, values: probability
 #-1 = orphan
