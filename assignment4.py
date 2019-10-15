@@ -33,7 +33,7 @@ class Node:
 
     def update(self):
         p_x =  self.p_given_parents()
-        p_not_x = 1 - self.p_given_parents() #Kan vel ta 1-p_x bare? :)
+        p_not_x = 1 - p_x
         if self.children != {}:
             for child in self.children.values():
                 p_child = child.p_given_parents()
