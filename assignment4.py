@@ -53,9 +53,9 @@ class Node:
         state_0 = self.distribution[0]
         state_1 = self.distribution[1]
         if state == 0:
-            return state_0 / (state_0 + state_1) * 100
+            return round(state_0 / (state_0 + state_1) * 100)
         elif state == 1:
-            return state_1 / (state_0 + state_1) * 100
+            return round(state_1 / (state_0 + state_1) * 100)
 
 #Keys: parents state, values: probability
 #-1 = orphan
@@ -93,7 +93,7 @@ H_node.children = H_children
 
 
 def infer_probability(x_key: str, x_state: int, given_states: dict):
-    for node in nodes.value():
+    for node in nodes.values():
         for value in node.distribution.values():
             value = 0
 
@@ -112,7 +112,7 @@ def infer_probability(x_key: str, x_state: int, given_states: dict):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
-    print('Probability of ', x_key, '=', x_state, ' given ', given_states, ' is ', nodes[x_key].get_probability(x_state))
+    print('Probability of ', x_key, '=', x_state, ' given ', given_states, ' is ', nodes[x_key].get_probability(x_state), '%')
 
 infer_probability('R', 1 , {'H':1, 'W':1})
 infer_probability('S', 1 , {'H':1, 'W':1})
