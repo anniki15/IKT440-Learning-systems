@@ -36,9 +36,9 @@ class Node:
         p_not_x = 1 - self.p_given_parents()
         if self.children != {}:
             for child in self.children.values():
-                temp = child.p_given_parents()
-                p_x *= temp
-                p_not_x *= (1 - temp)
+                p_child = child.p_given_parents()
+                p_x *= p_child
+                p_not_x *= (1 - p_child)
         alpha = 1 / (p_x + p_not_x)
 
         p_x = p_x*alpha
@@ -49,6 +49,9 @@ class Node:
         else:
             self.state = 0
             self.distribution[0] += 1
+
+    def get_probability(self, state):
+
 
 #Keys: parents state, values: probability
 #-1 = orphan
@@ -85,10 +88,7 @@ W_node.children = W_children
 H_node.children = H_children
 
 
-given_states_example = {'H':1,'W':1}
-p_x_state_example = {'R':1}
-
-def infer_probability(p_x_state : dict, given_states: dict):
+def infer_probability(x_key : str, x_state, given_states: dict):
 
     # Remember d-seperation
 
@@ -110,11 +110,13 @@ def infer_probability(p_x_state : dict, given_states: dict):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
-infer_probability(p_x_state_example, given_states_example)
+    print('Probability of ', x_key, '=', x_state, ' given ', given_states)
 
+infer_probability('R', 1 , {'H':1, 'W':1} )
+
+print('Distiburtion first query:')
 for n in nodes.values():
     print(n.distribution)
-
 
 
 
