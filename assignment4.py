@@ -29,7 +29,7 @@ class Node:
 
     def get_state_as_str(self):
         return self.name + str(self.state)
-   
+
     def update(self):
         p_x = self.p_given_parents()
         p_not_x = 1 - p_x
@@ -99,7 +99,6 @@ H_node.children = H_children
 
 
 def infer_probability(x_key: str, x_state: int, given_states: dict):
-
     #Set nodes to observed values or to random values if they are unobserved
     observed_nodes = {}
     unobserved_nodes = {}
@@ -110,16 +109,13 @@ def infer_probability(x_key: str, x_state: int, given_states: dict):
         else:
             nodes[n].state = random.choice(list({0,1}))
             unobserved_nodes[n] = nodes[n]
-
     for node in nodes.values():
         for value in node.distribution.values():
             value = 0
-
     #Stocastic simulation of probabilities
     for i in range(100):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
-
     print('Probability of ', x_key, '=', x_state, ' given ', given_states, ' is ', nodes[x_key].get_probability(x_state), '%')
 
 infer_probability('R', 1 , {'H':1, 'W':1})
@@ -129,7 +125,7 @@ infer_probability('W', 1 , {'S':1})
 infer_probability('H', 1 , {'S':0, 'R':1 })
 infer_probability('H', 1 , {'R':1})
 
-
+infer_probability('Questions', True , {'Perfect presentation'})
 
 
 
