@@ -16,7 +16,10 @@ class Node:
         self.children = {}
 
     def get_state_as_str(self):
-        return str(self.state)
+        # n = self.name
+        # s = self.state
+        # r = n+s
+        return self.name + str(self.state)
 
     def get_parents_state(self):
         #check for orphans
@@ -61,8 +64,8 @@ class Node:
 #-1 = orphan
 S_p_table = {'-1': .2}
 R_p_table = {'-1': .4}
-W_wet_p_table = {'0': .1, '1': .75}
-H_wet_p_table = {'00': .15,'01': .95, '10': .8, '11': .99}
+W_wet_p_table = {'R0': .01, 'R1': .90}
+H_wet_p_table = {'R0S0': .15,'R0S1': .95, 'R1S0': .8, 'R1S1': .99}
 
 R_node = Node('R', R_p_table)
 S_node = Node('S', S_p_table)
@@ -93,7 +96,7 @@ H_node.children = H_children
 
 
 def infer_probability(x_key: str, x_state: int, given_states: dict):
-    for node in nodes.value():
+    for node in nodes.values():
         for value in node.distribution.values():
             value = 0
 
@@ -105,10 +108,10 @@ def infer_probability(x_key: str, x_state: int, given_states: dict):
             nodes[n].state = given_states[n]
             observed_nodes[n] = nodes[n]
         else:
-            nodes[n].state = random.randrange(0,1)
+            nodes[n].state = random.choice(list({0,1}))
             unobserved_nodes[n] = nodes[n]
     #Stocastic simulation of probabilities
-    for i in range(100):
+    for i in range(1000):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
@@ -116,8 +119,10 @@ def infer_probability(x_key: str, x_state: int, given_states: dict):
 
 infer_probability('R', 1 , {'H':1, 'W':1})
 infer_probability('S', 1 , {'H':1, 'W':1})
-infer_probability('W', 1 , {'H':1})
+infer_probability('R', 1 , {'W':1})
 infer_probability('W', 1 , {'S':1})
+infer_probability('H', 1 , {'S':0, 'R':1 })
+infer_probability('H', 1 , {'R':1})
 
 
 
