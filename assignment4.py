@@ -108,7 +108,7 @@ def infer_probability(x_key: str, x_state: int, given_states: dict):
             nodes[n].state = random.randrange(0,1)
             unobserved_nodes[n] = nodes[n]
     #Stocastic simulation of probabilities
-    for i in range(100):
+    for i in range(1000):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
