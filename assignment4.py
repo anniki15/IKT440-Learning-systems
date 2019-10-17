@@ -15,25 +15,21 @@ class Node:
         self.parents = {}
         self.children = {}
 
-    def get_state_as_str(self):
-        # n = self.name
-        # s = self.state
-        # r = n+s
-        return self.name + str(self.state)
+    def p_given_parents(self):
+        return self.p_table[self.get_parents_state()]
 
     def get_parents_state(self):
         #check for orphans
         if not self.parents:
             return '-1'
-
         s = ''
         for parent in self.parents.values():
             s += parent.get_state_as_str()
         return s
 
-    def p_given_parents(self):
-        return self.p_table[self.get_parents_state()]
-
+    def get_state_as_str(self):
+        return self.name + str(self.state)
+   
     def update(self):
         p_x = self.p_given_parents()
         p_not_x = 1 - p_x
@@ -42,7 +38,15 @@ class Node:
                 p_child = child.p_given_parents()
                 p_x *= p_child
                 p_not_x *= (1 - p_child)
+        # p_not_x = 1 - p_x
         alpha = 1 / (p_x + p_not_x)
+        print('---------------------')
+        print('Node    = ', self.name)
+        print('Alpha   = ',alpha)
+        print('p_x     = ',p_x )
+        print('p_not_x = ',p_not_x)
+        print('1       = ',alpha * (p_x + p_not_x))
+        print('---------------------')
         p_x = p_x*alpha
 
         if random.random() < p_x:
@@ -51,7 +55,6 @@ class Node:
         else:
             self.state = 0
             self.distribution[0] += 1
-
     def get_probability(self, state: int):
         state_0 = self.distribution[0]
         state_1 = self.distribution[1]
@@ -62,10 +65,10 @@ class Node:
 
 #Keys: parents state, values: probability
 #-1 = orphan
-S_p_table = {'-1': .2}
 R_p_table = {'-1': .4}
+S_p_table = {'-1': .2}
 W_wet_p_table = {'R0': .01, 'R1': .90}
-H_wet_p_table = {'R0S0': .15,'R0S1': .95, 'R1S0': .8, 'R1S1': .99}
+H_wet_p_table = {'R0S0': .02,'R0S1': .95, 'R1S0': .91, 'R1S1': .99}
 
 R_node = Node('R', R_p_table)
 S_node = Node('S', S_p_table)
@@ -84,8 +87,8 @@ S_node.parents = S_parents
 W_node.parents = W_parents
 H_node.parents = H_parents
 
-R_children = {'W': W_node}
-S_children = {'H': H_node, 'W': W_node}
+R_children = {'W': W_node, 'H': H_node}
+S_children = {'H': H_node}
 W_children = {}
 H_children = {}
 
@@ -96,9 +99,6 @@ H_node.children = H_children
 
 
 def infer_probability(x_key: str, x_state: int, given_states: dict):
-    for node in nodes.values():
-        for value in node.distribution.values():
-            value = 0
 
     #Set nodes to observed values or to random values if they are unobserved
     observed_nodes = {}
@@ -110,8 +110,13 @@ def infer_probability(x_key: str, x_state: int, given_states: dict):
         else:
             nodes[n].state = random.choice(list({0,1}))
             unobserved_nodes[n] = nodes[n]
+
+    for node in nodes.values():
+        for value in node.distribution.values():
+            value = 0
+
     #Stocastic simulation of probabilities
-    for i in range(1000):
+    for i in range(100):
         random_node = random.choice(list(unobserved_nodes.values()))
         random_node.update()
 
