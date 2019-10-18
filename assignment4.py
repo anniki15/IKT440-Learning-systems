@@ -38,15 +38,15 @@ class Node:
                 p_child = child.p_given_parents()
                 p_x *= p_child
                 p_not_x *= (1 - p_child)
-        # p_not_x = 1 - p_x
+        #p_not_x = 1 - p_x
         alpha = 1 / (p_x + p_not_x)
-        print('---------------------')
-        print('Node    = ', self.name)
-        print('Alpha   = ',alpha)
-        print('p_x     = ',p_x )
-        print('p_not_x = ',p_not_x)
-        print('1       = ',alpha * (p_x + p_not_x))
-        print('---------------------')
+        # print('---------------------')
+        # print('Node    = ', self.name)
+        # print('Alpha   = ',alpha)
+        # print('p_x     = ',p_x )
+        # print('p_not_x = ',p_not_x)
+        # print('1       = ',alpha * (p_x + p_not_x))
+        # print('---------------------')
         p_x = p_x*alpha
 
         if random.random() < p_x:
@@ -125,7 +125,7 @@ infer_probability('W', 1 , {'S':1})
 infer_probability('H', 1 , {'S':0, 'R':1 })
 infer_probability('H', 1 , {'R':1})
 
-infer_probability('Questions', True , {'Perfect presentation'})
+#infer_probability('Questions', True , {'Perfect presentation'})
 
 
 
