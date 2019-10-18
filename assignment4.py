@@ -46,10 +46,6 @@ class Node:
             for child in self.children.values():
                 p_child = child.p_given_parents() # P( child in it's current state| current state of it's  parents)
                 p_x *= p_child
-                p_not_x *= (1 - p_child)
-        #p_not_x = 1 - p_x
-        alpha = 1 / (p_x + p_not_x)
-        p_x = p_x*alpha
 
             self.state = 0
             for child in self.children.values():
