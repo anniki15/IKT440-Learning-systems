@@ -39,10 +39,10 @@ class Node:
 
 
     def stochastic_simulation_run(self):
+        self.state = 1
         p_x = self.p_given_parents()    #P(x=1|current state of parents)
         p_not_x = 1 - p_x               #P(x=0|current state of parents)
         if self.children != {}:
-            self.state = 1
             for child in self.children.values():
                 p_child = child.p_given_parents() # P( child in it's current state| current state of it's  parents)
                 p_x *= p_child
