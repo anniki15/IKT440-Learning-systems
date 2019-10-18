@@ -135,6 +135,8 @@ infer_probability('W', 1 , {'S':1})
 infer_probability('H', 1 , {'S':0, 'R':1 })
 
 
+#infer_probability('Questions', True , {'Perfect presentation'})
+
 # infer_probability('Questions', True , {'Perfect presentation'})
 
         # print('---------------------')
