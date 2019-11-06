@@ -1,6 +1,8 @@
 import random
 import math
 
+# JORDA ER FLAT!#
+
 ### GLOBALS ###
 MAXPHEROMONES = 100000
 MINPHEROMONES = 1
@@ -15,11 +17,14 @@ class Node:
         self.coordinate_x = coordinates[0]
         self.coordinate_y = coordinates[1]
 
+    def distance_to(self, toNode):
+        return math.sqrt((self.coordinate_x - toNode.coordinate_x)**2 + (self.coordinate_y - toNode.coordinate_y)**2)
+
 class Edge:
-    def __init__(self, fromNode, toNode, cost):
+    def __init__(self, fromNode, toNode):
         self.fromNode = fromNode
         self.toNode = toNode
-        self.cost = cost
+        self.cost = fromNode.distance_to(toNode)
         self.pheromones = 1
 
     def __repr__(self):
@@ -79,7 +84,7 @@ def checkAllEdges(edges):
 def distribute_pheromones(edges)
 
 ### HARD KODA TING ###
-nodes = {
+nodes_example = {
     'node1': Node('node1', (-89.456, 50.726)),
     'node2': Node('node2', (-50.000, -40.543)),
     'node3': Node('node3', (10.435, -10.685)),
@@ -92,6 +97,9 @@ nodes = {
     'node10': Node('node10', (25.959, 88.903))
 }
 
+edges_example = {
+    'node1node2': Edge(nodes_example('node1'), nodes_example('node2'))
+}
 ### "Main" - aka. run the algorithm ###
 
 
