@@ -1,36 +1,35 @@
 import random
 import math
+
+### GLOBALS ###
 MAXPHEROMONES = 100000
 MINPHEROMONES = 1
 MAXCOST = math.sqrt(200**2 + 200**2)
 
-def distribute_pheromones(edges)
 
-# Edge class
+### CLASSES ###
+
+class Node:
+    def __init__(self, name, coordinates):
+        self.name = name
+        self.coordinate_x = coordinates[0]
+        self.coordinate_y = coordinates[1]
+
 class Edge:
-   def __init__(self, fromNode, toNode, cost):
+    def __init__(self, fromNode, toNode, cost):
         self.fromNode = fromNode
         self.toNode = toNode
         self.cost = cost
         self.pheromones = 1
 
-   def __repr__(self):
-       return self.fromNode.name + "--(" + str(self.cost) + ")--" + self.toNode.name
+    def __repr__(self):
+        return self.fromNode.name + "--(" + str(self.cost) + ")--" + self.toNode.name
 
-   def checkPheromones(self):
-       if(self.pheromones>MAXPHEROMONES):
-           self.pheromones = MAXPHEROMONES
-       if(self.pheromones<MINPHEROMONES):
-           self.pheromones = MINPHEROMONES
-
-def evaporation(egdes):
-    for edge in egdes:
-        edge.pheromones *= 0.99
-
-def checkAllEdges(edges):
-    for edge in edges:
-        edge.checkPheromones()
-
+    def checkPheromones(self):
+        if(self.pheromones>MAXPHEROMONES):
+            self.pheromones = MAXPHEROMONES
+        if(self.pheromones<MINPHEROMONES):
+            self.pheromones = MINPHEROMONES
 
 class ANT:
     def __init__(self, ):
@@ -68,5 +67,31 @@ class ANT:
         for oneEdge in bestSolution:  # self.visitedEdges:
             oneEdge.pheromones += score
 
-edges = {}
+### NON-CLASS FUNCTIONS ###
+def evaporation(egdes):
+    for edge in egdes:
+        edge.pheromones *= 0.99
+
+def checkAllEdges(edges):
+    for edge in edges:
+        edge.checkPheromones()
+
+def distribute_pheromones(edges)
+
+### HARD KODA TING ###
+nodes = {
+    'node1': Node('node1', (-89.456, 50.726)),
+    'node2': Node('node2', (-50.000, -40.543)),
+    'node3': Node('node3', (10.435, -10.685)),
+    'node4': Node('node4', (60.124, 60.478)),
+    'node5': Node('node5', (90.096, -60.729)),
+    'node6': Node('node6', (2, -88.789)),
+    'node7': Node('node7', (-5.111, -47.426)),
+    'node8': Node('node8', (-76.824, -99.009)),
+    'node9': Node('node9', (-2.131, 2.858)),
+    'node10': Node('node10', (25.959, 88.903))
+}
+
+### "Main" - aka. run the algorithm ###
+
 
