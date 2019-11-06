@@ -4,14 +4,11 @@ MAXPHEROMONES = 100000
 MINPHEROMONES = 1
 MAXCOST = math.sqrt(200**2 + 200**2)
 
-#Node
- #ANNIKA
-#Hardkoda noder
-# ANNIKA
+def distribute_pheromones(edges)
 
 # Edge class
 class Edge:
-   def __init__(self,fromNode,toNode,cost):
+   def __init__(self, fromNode, toNode, cost):
         self.fromNode = fromNode
         self.toNode = toNode
         self.cost = cost
@@ -36,15 +33,18 @@ def checkAllEdges(edges):
 
 
 class ANT:
-    def __init__(self):
-        self.visitedEdges = []
+    def __init__(self, ):
+        self.visitedEdges = {}
 
-    def walk(self, startNode):
+    def walk(self,  startNode: Node, endNode: Node, nodesToVisit: int):
+        """
+        Walks from 'startNode', visits an amount of nodes equal to 'nodesToVisit', then walks to endNode
+        """
         currentNode = startNode
-        currentEdge = None
-        while (not checkAllNodesPresent(self.visitedEdges)):
-            currentEdge = currentNode.rouletteWheel(self.visitedEdges, startNode)
-            # currentEdge = currentNode.roluetteWheelSimple()
+
+
+        while (len(self.visitedEdges) < nodesToVisit ):
+            nextNode = currentNode.roluetteWheelSimple()
             currentNode = currentEdge.toNode
             self.visitedEdges.append(currentEdge)
 

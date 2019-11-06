@@ -107,6 +107,7 @@ class ANT:
     def __init__(self):
         self.visitedEdges = []
 
+    #Walks to an unvisited node
     def walk(self,startNode):
         currentNode = startNode
         currentEdge = None
