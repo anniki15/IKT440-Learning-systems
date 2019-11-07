@@ -112,7 +112,6 @@ def run(n):
             if toNode != fromNode:
                 eddie = Edge(fromNode, toNode)
                 key = str(fromNode.name + toNode.name)
-                print(key)
                 fromNode.edges[key] = eddie
                 allEdges[key] = eddie
 
