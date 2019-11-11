@@ -77,8 +77,9 @@ class ANT:
             currentNode = currentEdge.toNode
             self.visitedEdges[currentEdge.key] = currentEdge
 
+
         last_edge_key = str(currentNode.name + endNode.name)
-        n = allEdges[last_edge_key]
+        self.visitedEdges[last_edge_key] = allEdges[last_edge_key]
 
 
 
