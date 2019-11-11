@@ -81,6 +81,12 @@ class ANT:
         last_edge_key = str(currentNode.name + endNode.name)
         self.visitedEdges[last_edge_key] = allEdges[last_edge_key]
 
+    def pheromonesWithoutMMAS(self):
+        currentCost = self.visitedEdges
+        #Score
+        score = 10**(1-float(currentCost)/MAXCOST)#1
+        for oneEdge in self.visitedEdges:
+            oneEdge.pheromones += score
 
 
 ### HARD KODA TING ###
