@@ -80,10 +80,15 @@ class ANT:
         last_edge_key = str(currentNode.name + endNode.name)
         n = allEdges[last_edge_key]
 
+    def getSum(self):
+        return sum(e.cost for e in self.visitedEdges.values())
+        #Blir feil, skjønner ikke hvordan jeg får tak på cost til edgene i visitedEdges, når value-delen til visitedEdges er på format:
+        # {'node1node7':node1--(129,4136)--node7}
+
     def pheromonesWithoutMMAS(self):
-        currentCost = self.visitedEdges
+        currentCost = self.getSum()
         #Score
-        score = 10**(1-float(currentCost)/MAXCOST)#1
+        score = 10**(1-float(currentCost)/MAXCOST)
         for oneEdge in self.visitedEdges:
             oneEdge.pheromones += score
 
