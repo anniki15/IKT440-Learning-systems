@@ -33,9 +33,6 @@ class Node:
     def __repr__(self):
         return self.name
 
-
-
-
 class Edge:
    def __init__(self,fromNode,toNode,cost):
         self.fromNode = fromNode

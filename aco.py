@@ -6,7 +6,10 @@ import math
 ### GLOBALS ###
 MAXPHEROMONES = 100000
 MINPHEROMONES = 1
-MAXCOST = math.sqrt(200**2 + 200**2)
+MAXCOST = 1500
+
+bestScore = 0
+bestSolution = {}
 
 
 ### CLASSES ###
@@ -81,11 +84,33 @@ class ANT:
         last_edge_key = str(currentNode.name + endNode.name)
         self.visitedEdges[last_edge_key] = allEdges[last_edge_key]
 
+    def getSum(self):
+        sum = 0
+        for e in self.visitedEdges.values():
+            sum += e.cost
+        print('SUM: ', sum)
+        return sum
+
+
     def pheromonesWithoutMMAS(self):
-        currentCost = sum(e.cost for e in self.visitedEdges)
+        # currentCost = sum(e.cost for e in self.visitedEdges)
+        currentCost = self.getSum()
         #Score
-        score = 10**(1-float(currentCost)/MAXCOST)#1
-        for oneEdge in self.visitedEdges:
+        score = 10**(1-float(currentCost)/MAXCOST)
+        for oneEdge in self.visitedEdges.values():
+            oneEdge.pheromones += score
+
+    def pheromones(self):
+        currentCost = self.getSum()
+        # Score
+        score = 10 ** (1 - float(currentCost) / MAXCOST)  # 1
+        global bestScore
+        global bestSolution
+        if (score > bestScore):
+            bestScore = score
+            bestSolution = self.visitedEdges
+
+        for oneEdge in bestSolution.values():  # self.visitedEdges:
             oneEdge.pheromones += score
 
 
@@ -106,6 +131,12 @@ nodes_example = {
 edges_example = {
     'node1node2': Edge(nodes_example['node1'], nodes_example['node2'])
 }
+### Other functions ###
+
+def evaporation():
+    for edge in allEdges.values():
+        edge.pheromones *= 0.99
+
 ### "Main" - aka. run the algorithm ###
 
 allNodes = nodes_example
@@ -114,6 +145,7 @@ allEdges = {}
 #Assign edges between all nodes
 
 def run(n):
+    #Make edges between nodes
     for fromNode in allNodes.values():
         for toNode in allNodes.values():
             if toNode != fromNode:
@@ -122,9 +154,20 @@ def run(n):
                 fromNode.edges[key] = eddie
                 allEdges[key] = eddie
 
-    for i in range(10):
+    for i in range(1000):
+        evaporation()
         annie = ANT()
         annie.walk(nodes_example['node1'], nodes_example['node10'], n)
+        annie.pheromones()
+
+
+    print('---------------')
+    for e in annie.visitedEdges.values():
+        print(e.fromNode, e.pheromones)
+    print('node10')
+    print('---------------')
+
+
 
 run(8)
 
