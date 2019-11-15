@@ -11,8 +11,8 @@ vocabulary = set()
 total_document_count = 0
 prediction_testing_documents = dict()
 categories = dict()
-###
 
+###
 class Category:
     def __init__(self, name):
          self.name = name
