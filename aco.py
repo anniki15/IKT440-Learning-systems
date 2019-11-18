@@ -36,7 +36,6 @@ class Node:
         num = random.uniform(0, allPheromones)
         s = 0
         i = 0
-        print('Viable edges:  ', viableEdges)
         selectedEdge = viableEdges[0]
         while (s <= num):
             selectedEdge = viableEdges[i]
@@ -71,8 +70,8 @@ class ANT:
 
     def walk(self,  startNode: Node, endNode: Node, nodesToVisit: int):
         """
-        Walks from 'startNode', visits an amount of nodes equal to 'nodesToVisit', then walks to endNode
-        The graph defines the network of nodes in witch the ant will walk.
+        Walks from 'startNode', visits an amount of nodes equal to 'nodesToVisit', then walks
+        to endNode. The graph defines the network of nodes in witch the ant will walk.
         """
         currentNode = startNode
         while (len(self.visitedEdges) < nodesToVisit ):
@@ -110,19 +109,19 @@ class ANT:
             oneEdge.pheromones += score
 
 
-### HARD KODA TING ###
-# nodes_example = {
-#     'node1': Node('node1', (-89.456, 50.726)),
-#     'node2': Node('node2', (-50.000, -40.543)),
-#     'node3': Node('node3', (10.435, -10.685)),
-#     'node4': Node('node4', (60.124, 60.478)),
-#     'node5': Node('node5', (90.096, -60.729)),
-#     'node6': Node('node6', (2, -88.789)),
-#     'node7': Node('node7', (-5.111, -47.426)),
-#     'node8': Node('node8', (-76.824, -99.009)),
-#     'node9': Node('node9', (-2.131, 2.858)),
-#     'node10': Node('node10', (25.959, 88.903))
-# }
+## HARD KODA TING ###
+nodes_example = {
+    'node1': Node('node1', (-89.456, 50.726)),
+    'node2': Node('node2', (-50.000, -40.543)),
+    'node3': Node('node3', (10.435, -10.685)),
+    'node4': Node('node4', (60.124, 60.478)),
+    'node5': Node('node5', (90.096, -60.729)),
+    'node6': Node('node6', (2, -88.789)),
+    'node7': Node('node7', (-5.111, -47.426)),
+    'node8': Node('node8', (-76.824, -99.009)),
+    'node9': Node('node9', (-2.131, 2.858)),
+    'node10': Node('node10', (25.959, 88.903))
+}
 
 # edges_example = {
 #     'node1node2': Edge(nodes_example['node1'], nodes_example['node2'])
@@ -179,14 +178,16 @@ def make_node_connections():
                 fromNode.edges[key] = eddie
                 allEdges[key] = eddie
 
-allNodes = dict_from_cvs_file('25355', '22477')
+#allNodes = dict_from_cvs_file('25355', '22477')
+allNodes = nodes_example
+
 allEdges = {}
 make_node_connections()
 
 
 def run(startNode, endNode, n_cities):
 
-    for i in range(1):
+    for i in range(100):
         evaporation()
         annie = ANT()
         annie.walk(allNodes[startNode], allNodes[endNode], n_cities)
@@ -197,6 +198,7 @@ def run(startNode, endNode, n_cities):
     for e in annie.visitedEdges.values():
         print(e.fromNode, e.pheromones)
     print('node10')
+    print(annie.getSum())
     print('---------------')
 
 
